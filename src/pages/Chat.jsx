@@ -91,9 +91,27 @@ const Chat = () => {
     e.preventDefault(); // Stop default browser menu
     const isMine = msg.senderId !== userId;
     if (isMine) { // Only show delete option for "mine" messages
+      const menuWidth = 180;
+      const menuHeight = 50;
+      
+      // To keep the menu inside the chat container, open it to the left of the cursor
+      // since 'mine' messages are on the right side.
+      let adjustedX = e.clientX - menuWidth;
+      
+      // Safety check: if it goes off the left screen edge somehow
+      if (adjustedX < 0) {
+        adjustedX = e.clientX;
+      }
+      
+      let adjustedY = e.clientY;
+      if (adjustedY + menuHeight > window.innerHeight) {
+        // Open upwards if near the bottom edge
+        adjustedY = window.innerHeight - menuHeight - 15;
+      }
+
       setContextMenu({
-        mouseX: e.clientX,
-        mouseY: e.clientY,
+        mouseX: adjustedX,
+        mouseY: adjustedY,
         messageId: msg._id
       });
     }
