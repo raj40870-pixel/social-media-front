@@ -59,10 +59,20 @@ const Chat = () => {
         type: 'text',
         content: inputText.trim()
       });
-      // Message is appended via socket
+      // Message is appended via polling
       setInputText('');
     } catch (err) {
       console.error('Error sending message', err);
+    }
+  };
+
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      await axios.delete(`/messages/${messageId}`);
+      // Remove from UI immediately for snappy feel
+      setMessages((prev) => prev.filter(msg => msg._id !== messageId));
+    } catch (err) {
+      console.error('Failed to delete message', err);
     }
   };
 
@@ -183,7 +193,19 @@ const Chat = () => {
             <div key={msg._id} className={`chat-bubble-container ${isMine ? 'mine' : 'theirs'}`}>
               <div className={`chat-bubble ${isMine ? 'mine' : 'theirs'}`}>
                 {renderMessageContent(msg)}
-                <span className="chat-time">{formatTime(msg.createdAt)}</span>
+                <div className="chat-meta" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '5px', marginTop: '4px' }}>
+                  <span className="chat-time">{formatTime(msg.createdAt)}</span>
+                  {isMine && (
+                    <button 
+                      className="delete-msg-btn" 
+                      onClick={() => handleDeleteMessage(msg._id)}
+                      title="Delete message"
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', padding: 0, opacity: 0.7 }}
+                    >
+                      🗑️
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           );
