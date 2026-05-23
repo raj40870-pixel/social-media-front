@@ -221,3 +221,33 @@
   display: block;
   margin-bottom: 5px;
 }
+
+/* Mobile Responsiveness for Chat */
+@media (max-width: 768px) {
+  .chat-container {
+    height: calc(100vh - 4.5rem); /* Fill screen minus navbar and safe area */
+    border-radius: 0;
+    box-shadow: none;
+    margin: -1rem; /* Negate the main-content padding */
+    max-width: 100vw;
+  }
+  
+  .chat-bubble {
+    max-width: 85%; /* Use more width on mobile */
+  }
+  
+  .chat-header {
+    padding: 8px 10px;
+  }
+  
+  .chat-input-container {
+    padding: 8px;
+  }
+  
+  .attachment-menu {
+    bottom: 60px;
+    left: 5px;
+    width: calc(100vw - 10px);
+    max-width: 300px;
+  }
+}

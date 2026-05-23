@@ -45,7 +45,7 @@ const Requests = () => {
           {requests.map((request) => {
             const user = request.fromUserId;
             return (
-              <div key={request._id} className="profile-card" style={{ display: 'flex', flexDirection: 'row', padding: '1rem', alignItems: 'center' }}>
+              <div key={request._id} className="profile-card" style={{ display: 'flex', flexWrap: 'wrap', padding: '1rem', alignItems: 'center', gap: '10px' }}>
                 <img 
                   src={getValidImageUrl(user.photoUrl)} 
                   alt="Profile" 

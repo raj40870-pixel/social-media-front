@@ -411,6 +411,7 @@ a {
 @media (max-width: 768px) {
   .profile-container {
     flex-direction: column-reverse;
+    padding: 1.5rem;
   }
   .preview-section {
     width: 100%;
@@ -418,5 +419,41 @@ a {
   .main-content {
     padding: 1rem;
     padding-top: 5rem;
+  }
+  .auth-container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  .auth-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .navbar-container {
+    padding: 0 1rem;
+  }
+  .navbar-logo {
+    font-size: 1.25rem;
+  }
+  .user-greeting {
+    display: none; /* Hide "Welcome, User" on small screens to save space */
+  }
+  .dropdown-menu {
+    right: -10px; /* Adjust so it doesn't overflow screen */
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    border-radius: 8px;
+  }
+  .profile-image {
+    height: 250px;
+  }
+  .btn-primary, .btn-secondary {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  .form-section h2 {
+    font-size: 1.25rem;
   }
 }
