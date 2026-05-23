@@ -38,42 +38,44 @@ function App() {
   if (loading) return <div className="loading-state">Loading...</div>;
 
   return (
-    <Router>
-      <div className="app-layout">
-        <NavBar user={user} setUser={setUser} />
-        
-        <div className="main-content">
-          <Routes>
-            <Route 
-              path="/login" 
-              element={!user ? <Login setUser={setUser} /> : <Navigate to="/" />} 
-            />
-            <Route 
-              path="/" 
-              element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />} 
-            />
-            <Route 
-              path="/profile" 
-              element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />} 
-            />
-            <Route 
-              path="/connections" 
-              element={user ? <Connections /> : <Navigate to="/login" />} 
-            />
-            <Route 
-              path="/requests" 
-              element={user ? <Requests /> : <Navigate to="/login" />} 
-            />
-            <Route 
-              path="/chat/:userId" 
-              element={user ? <Chat /> : <Navigate to="/login" />} 
-            />
-            {/* Catch-all redirect */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
+    <div onContextMenu={(e) => e.preventDefault()}>
+      <Router>
+        <div className="app-layout">
+          <NavBar user={user} setUser={setUser} />
+          
+          <div className="main-content">
+            <Routes>
+              <Route 
+                path="/login" 
+                element={!user ? <Login setUser={setUser} /> : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/" 
+                element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />} 
+              />
+              <Route 
+                path="/profile" 
+                element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />} 
+              />
+              <Route 
+                path="/connections" 
+                element={user ? <Connections /> : <Navigate to="/login" />} 
+              />
+              <Route 
+                path="/requests" 
+                element={user ? <Requests /> : <Navigate to="/login" />} 
+              />
+              <Route 
+                path="/chat/:userId" 
+                element={user ? <Chat /> : <Navigate to="/login" />} 
+              />
+              {/* Catch-all redirect */}
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 
