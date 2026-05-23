@@ -66,15 +66,15 @@ const Connections = () => {
 
   return (
     <div className="page-container" style={{ margin: '0 auto', maxWidth: '600px' }}>
-      <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '2rem', minHeight: '40px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '10px' }}>
+        <h2 style={{ margin: 0, fontSize: '1.5rem' }}>Your Connections</h2>
         <button 
           className="btn-primary" 
           onClick={() => setShowModal(true)}
-          style={{ position: 'absolute', left: 0, padding: '0.4rem 1rem', width: 'auto', fontSize: '0.9rem' }}
+          style={{ padding: '0.4rem 1rem', width: 'auto', fontSize: '0.9rem', margin: 0 }}
         >
           New User
         </button>
-        <h2 style={{ margin: 0, textAlign: 'center' }}>Your Connections</h2>
       </div>
       
       {connections.length === 0 ? (
