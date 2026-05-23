@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = ({ setUser }) => {
-  const [email, setEmail] = useState('pm@gmail.com');
-  const [password, setPassword] = useState('Narendra');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -21,10 +21,13 @@ const Login = ({ setUser }) => {
     } catch (err) {
       if (err.response?.status === 401) {
         try {
-          // Attempt to auto-signup if user doesn't exist
+          // Attempt to auto-signup if user doesn't exist using part of email as name
+          const namePrefix = email.split('@')[0];
+          const firstName = namePrefix ? namePrefix.charAt(0).toUpperCase() + namePrefix.slice(1) : 'New';
+          
           await axios.post('/auth/signup', {
-            firstName: 'Narendra',
-            lastName: 'Modi',
+            firstName: firstName,
+            lastName: 'User',
             email: email,
             password: password
           });
@@ -62,18 +65,18 @@ const Login = ({ setUser }) => {
               className="form-control" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
-              placeholder="pm@gmail.com"
+              placeholder="Enter your email"
               required 
             />
           </div>
           <div className="form-group">
             <label>Password</label>
             <input 
-              type="text" 
+              type="password" 
               className="form-control" 
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
-              placeholder="Narendra"
+              placeholder="Enter your password"
               required 
             />
           </div>
