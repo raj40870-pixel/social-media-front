@@ -94,19 +94,30 @@ const Chat = () => {
       const menuWidth = 180;
       const menuHeight = 50;
       
-      // To keep the menu inside the chat container, open it to the left of the cursor
-      // since 'mine' messages are on the right side.
-      let adjustedX = e.clientX - menuWidth;
+      // Handle touch devices where clientX might be undefined on contextmenu
+      const clientX = e.clientX || (e.touches && e.touches.length > 0 ? e.touches[0].clientX : window.innerWidth / 2);
+      const clientY = e.clientY || (e.touches && e.touches.length > 0 ? e.touches[0].clientY : window.innerHeight / 2);
+
+      // Open towards the left of the click, but keep within bounds
+      let adjustedX = clientX - menuWidth;
       
-      // Safety check: if it goes off the left screen edge somehow
-      if (adjustedX < 0) {
-        adjustedX = e.clientX;
+      // If subtracting menuWidth pushes it off the left screen, stick it to the left edge
+      if (adjustedX < 10) {
+        adjustedX = 10;
+      }
+      // If it still somehow goes off the right screen, stick to the right edge
+      if (adjustedX + menuWidth > window.innerWidth) {
+        adjustedX = window.innerWidth - menuWidth - 10;
       }
       
-      let adjustedY = e.clientY;
+      let adjustedY = clientY;
+      // Prevent it from going off the bottom
       if (adjustedY + menuHeight > window.innerHeight) {
-        // Open upwards if near the bottom edge
         adjustedY = window.innerHeight - menuHeight - 15;
+      }
+      // Prevent it from going off the top
+      if (adjustedY < 10) {
+        adjustedY = 10;
       }
 
       setContextMenu({
