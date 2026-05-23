@@ -12,7 +12,7 @@ import Requests from './pages/Requests';
 import Chat from './pages/Chat';
 
 // Configure Axios
-axios.defaults.baseURL = 'http://localhost:3456/api';
+axios.defaults.baseURL = 'https://social-media-backend-nine-navy.vercel.app/api';
 axios.defaults.withCredentials = true; // IMPORTANT for sending cookies
 
 function App() {
