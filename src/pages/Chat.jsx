@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { io } from 'socket.io-client';
 import { getValidImageUrl } from '../utils';
 import './Chat.css';
 
@@ -21,7 +20,7 @@ const Chat = () => {
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Initialize Socket and fetch history
+  // Initialize Chat and start polling
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -31,26 +30,17 @@ const Chat = () => {
         console.error('Failed to fetch chat history', err);
       }
     };
+    
+    // Initial fetch
     fetchHistory();
 
-    const newSocket = io('http://localhost:3456', { withCredentials: true });
-    setSocket(newSocket);
-
-    // Join room
-    axios.get('/profile/view').then((res) => {
-      newSocket.emit('join', res.data.data._id);
-    }).catch(() => {});
-
-    newSocket.on('receiveMessage', (message) => {
-      setMessages((prev) => {
-        // Prevent duplicate messages
-        if (prev.some((m) => m._id === message._id)) return prev;
-        return [...prev, message];
-      });
-    });
+    // Vercel Serverless Polling (every 3 seconds)
+    const intervalId = setInterval(() => {
+        fetchHistory();
+    }, 3000);
 
     return () => {
-      newSocket.disconnect();
+      clearInterval(intervalId);
     };
   }, [userId]);
 
