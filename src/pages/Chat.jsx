@@ -91,25 +91,11 @@ const Chat = () => {
     e.preventDefault(); // Stop default browser menu
     const isMine = msg.senderId !== userId;
     if (isMine) { // Only show delete option for "mine" messages
-      const menuWidth = 180;
       const menuHeight = 50;
       
-      // Handle touch devices where clientX might be undefined on contextmenu
-      const clientX = e.clientX || (e.touches && e.touches.length > 0 ? e.touches[0].clientX : window.innerWidth / 2);
+      // Use Y coordinate from touch or mouse
       const clientY = e.clientY || (e.touches && e.touches.length > 0 ? e.touches[0].clientY : window.innerHeight / 2);
 
-      // Open towards the left of the click, but keep within bounds
-      let adjustedX = clientX - menuWidth;
-      
-      // If subtracting menuWidth pushes it off the left screen, stick it to the left edge
-      if (adjustedX < 10) {
-        adjustedX = 10;
-      }
-      // If it still somehow goes off the right screen, stick to the right edge
-      if (adjustedX + menuWidth > window.innerWidth) {
-        adjustedX = window.innerWidth - menuWidth - 10;
-      }
-      
       let adjustedY = clientY;
       // Prevent it from going off the bottom
       if (adjustedY + menuHeight > window.innerHeight) {
@@ -121,8 +107,8 @@ const Chat = () => {
       }
 
       setContextMenu({
-        mouseX: adjustedX,
         mouseY: adjustedY,
+        isMine: isMine,
         messageId: msg._id
       });
     }
@@ -235,7 +221,8 @@ const Chat = () => {
           style={{
             position: 'fixed',
             top: contextMenu.mouseY,
-            left: contextMenu.mouseX,
+            right: contextMenu.isMine ? '15px' : 'auto',
+            left: !contextMenu.isMine ? '15px' : 'auto',
             backgroundColor: '#1f2937',
             color: '#ef4444',
             padding: '10px 16px',
@@ -248,7 +235,8 @@ const Chat = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            userSelect: 'none'
+            userSelect: 'none',
+            whiteSpace: 'nowrap'
           }}
           onClick={(e) => {
             e.stopPropagation();
