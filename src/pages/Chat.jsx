@@ -17,8 +17,18 @@ const Chat = () => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   
+  // Custom context menu state
+  const [contextMenu, setContextMenu] = useState(null);
+  
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Close context menu when clicking anywhere else
+  useEffect(() => {
+    const handleGlobalClick = () => setContextMenu(null);
+    window.addEventListener('click', handleGlobalClick);
+    return () => window.removeEventListener('click', handleGlobalClick);
+  }, []);
 
   // Initialize Chat and start polling
   useEffect(() => {
@@ -71,8 +81,21 @@ const Chat = () => {
       await axios.delete(`/messages/${messageId}`);
       // Remove from UI immediately for snappy feel
       setMessages((prev) => prev.filter(msg => msg._id !== messageId));
+      setContextMenu(null); // hide menu after delete
     } catch (err) {
       console.error('Failed to delete message', err);
+    }
+  };
+
+  const handleContextMenu = (e, msg) => {
+    e.preventDefault(); // Stop default browser menu
+    const isMine = msg.senderId !== userId;
+    if (isMine) { // Only show delete option for "mine" messages
+      setContextMenu({
+        mouseX: e.clientX,
+        mouseY: e.clientY,
+        messageId: msg._id
+      });
     }
   };
 
@@ -176,6 +199,41 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
+      {/* CUSTOM CONTEXT MENU */}
+      {contextMenu && (
+        <div 
+          className="custom-context-menu"
+          style={{
+            position: 'fixed',
+            top: contextMenu.mouseY,
+            left: contextMenu.mouseX,
+            backgroundColor: '#1f2937',
+            color: '#ef4444',
+            padding: '10px 16px',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            zIndex: 9999,
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '600',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            userSelect: 'none'
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteMessage(contextMenu.messageId);
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Delete Message
+        </div>
+      )}
+
       {/* HEADER */}
       <div className="chat-header">
         <button className="back-btn" onClick={() => navigate('/connections')}>←</button>
@@ -190,21 +248,15 @@ const Chat = () => {
         {messages.map((msg) => {
           const isMine = msg.senderId !== userId;
           return (
-            <div key={msg._id} className={`chat-bubble-container ${isMine ? 'mine' : 'theirs'}`}>
+            <div 
+              key={msg._id} 
+              className={`chat-bubble-container ${isMine ? 'mine' : 'theirs'}`}
+              onContextMenu={(e) => handleContextMenu(e, msg)}
+            >
               <div className={`chat-bubble ${isMine ? 'mine' : 'theirs'}`}>
                 {renderMessageContent(msg)}
                 <div className="chat-meta" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '5px', marginTop: '4px' }}>
                   <span className="chat-time">{formatTime(msg.createdAt)}</span>
-                  {isMine && (
-                    <button 
-                      className="delete-msg-btn" 
-                      onClick={() => handleDeleteMessage(msg._id)}
-                      title="Delete message"
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', padding: 0, opacity: 0.7 }}
-                    >
-                      🗑️
-                    </button>
-                  )}
                 </div>
               </div>
             </div>
