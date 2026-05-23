@@ -91,23 +91,7 @@ const Chat = () => {
     e.preventDefault(); // Stop default browser menu
     const isMine = msg.senderId !== userId;
     if (isMine) { // Only show delete option for "mine" messages
-      const menuHeight = 50;
-      
-      // Use Y coordinate from touch or mouse
-      const clientY = e.clientY || (e.touches && e.touches.length > 0 ? e.touches[0].clientY : window.innerHeight / 2);
-
-      let adjustedY = clientY;
-      // Prevent it from going off the bottom
-      if (adjustedY + menuHeight > window.innerHeight) {
-        adjustedY = window.innerHeight - menuHeight - 15;
-      }
-      // Prevent it from going off the top
-      if (adjustedY < 10) {
-        adjustedY = 10;
-      }
-
       setContextMenu({
-        mouseY: adjustedY,
         isMine: isMine,
         messageId: msg._id
       });
@@ -214,43 +198,6 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
-      {/* CUSTOM CONTEXT MENU */}
-      {contextMenu && (
-        <div 
-          className="custom-context-menu"
-          style={{
-            position: 'fixed',
-            top: contextMenu.mouseY,
-            right: contextMenu.isMine ? '15px' : 'auto',
-            left: !contextMenu.isMine ? '15px' : 'auto',
-            backgroundColor: '#1f2937',
-            color: '#ef4444',
-            padding: '10px 16px',
-            borderRadius: '8px',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-            zIndex: 9999,
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: '600',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            userSelect: 'none',
-            whiteSpace: 'nowrap'
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteMessage(contextMenu.messageId);
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          Delete Message
-        </div>
-      )}
-
       {/* HEADER */}
       <div className="chat-header">
         <button className="back-btn" onClick={() => navigate('/connections')}>←</button>
@@ -269,6 +216,7 @@ const Chat = () => {
               key={msg._id} 
               className={`chat-bubble-container ${isMine ? 'mine' : 'theirs'}`}
               onContextMenu={(e) => handleContextMenu(e, msg)}
+              style={{ position: 'relative' }}
             >
               <div className={`chat-bubble ${isMine ? 'mine' : 'theirs'}`}>
                 {renderMessageContent(msg)}
@@ -276,6 +224,44 @@ const Chat = () => {
                   <span className="chat-time">{formatTime(msg.createdAt)}</span>
                 </div>
               </div>
+              
+              {/* ATTACHED CONTEXT MENU */}
+              {contextMenu && contextMenu.messageId === msg._id && (
+                <div 
+                  className="custom-context-menu"
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: isMine ? '0' : 'auto',
+                    left: !isMine ? '0' : 'auto',
+                    marginTop: '5px',
+                    backgroundColor: '#1f2937',
+                    color: '#ef4444',
+                    padding: '10px 16px',
+                    borderRadius: '8px',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    zIndex: 9999,
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    userSelect: 'none',
+                    whiteSpace: 'nowrap'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteMessage(contextMenu.messageId);
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  Delete Message
+                </div>
+              )}
             </div>
           );
         })}
