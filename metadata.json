@@ -1,0 +1,6 @@
+{
+  "name": "Social Media Frontend",
+  "description": "A modern social media application frontend built with React, featuring user profiles, connections, and real-time chat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

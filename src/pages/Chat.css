@@ -1,0 +1,253 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #e5ddd5; /* WhatsApp background */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #075e54; /* WhatsApp Green */
+  color: white;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.chat-header-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.chat-header-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-bubble-container {
+  display: flex;
+  width: 100%;
+}
+
+.chat-bubble-container.mine {
+  justify-content: flex-end;
+}
+
+.chat-bubble-container.theirs {
+  justify-content: flex-start;
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-bubble p {
+  margin: 0;
+  word-wrap: break-word;
+  font-size: 0.95rem;
+}
+
+.chat-bubble.mine {
+  background-color: #dcf8c6; /* WhatsApp sent bubble */
+  border-top-right-radius: 0;
+}
+
+.chat-bubble.theirs {
+  background-color: #ffffff;
+  border-top-left-radius: 0;
+}
+
+.chat-time {
+  font-size: 0.7rem;
+  color: #999;
+  align-self: flex-end;
+  margin-top: 4px;
+}
+
+.chat-input-container {
+  display: flex;
+  align-items: flex-end;
+  padding: 10px;
+  background-color: transparent;
+  gap: 8px;
+}
+
+.chat-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 24px;
+  padding: 5px 10px;
+  position: relative;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.attachment-menu {
+  position: absolute;
+  bottom: 55px;
+  left: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  z-index: 100;
+}
+
+.attachment-menu label {
+  padding: 10px 20px;
+  cursor: pointer;
+  display: block;
+}
+
+.attachment-menu label:hover {
+  background-color: #f0f0f0;
+}
+
+.chat-textarea {
+  flex: 1;
+  border: none;
+  resize: none;
+  padding: 10px;
+  font-size: 1rem;
+  max-height: 100px;
+  outline: none;
+  font-family: inherit;
+}
+
+.chat-action-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.send-btn, .mic-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.send-btn {
+  background-color: #008f68; /* WhatsApp dark teal */
+}
+
+.mic-btn {
+  background-color: #008f68;
+  font-size: 1.2rem;
+  user-select: none; /* Prevent text selection while holding */
+  touch-action: none; /* Important for pointer events on mobile */
+}
+
+.mic-btn.recording {
+  background-color: #ff3b30;
+  transform: scale(1.2);
+}
+
+.chat-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.chat-video {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.chat-audio {
+  max-width: 100%;
+  margin-bottom: 5px;
+  height: 40px;
+}
+
+.chat-doc {
+  background: rgba(0,0,0,0.05);
+  padding: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Mobile Responsiveness for Chat */
+@media (max-width: 768px) {
+  .chat-container {
+    height: calc(100vh - 4.5rem); /* Fill screen minus navbar and safe area */
+    border-radius: 0;
+    box-shadow: none;
+    margin: -1rem; /* Negate the main-content padding */
+    max-width: 100vw;
+  }
+  
+  .chat-bubble {
+    max-width: 85%; /* Use more width on mobile */
+  }
+  
+  .chat-header {
+    padding: 8px 10px;
+  }
+  
+  .chat-input-container {
+    padding: 8px;
+  }
+  
+  .attachment-menu {
+    bottom: 60px;
+    left: 5px;
+    width: calc(100vw - 10px);
+    max-width: 300px;
+  }
+}
